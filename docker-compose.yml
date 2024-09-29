@@ -1,0 +1,90 @@
+version: '3.8'
+
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    expose:
+      - "9093"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9093,OUTSIDE://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    depends_on:
+      - zookeeper
+
+  metabase:
+    image: metabase/metabase:latest
+    container_name: metabase
+    hostname: metabase
+    ports:
+      - "3000:3000"
+    environment:
+      MB_DB_TYPE: postgres
+      MB_DB_DBNAME: metabaseappdb
+      MB_DB_PORT: 5432
+      MB_DB_USER: metabase
+      MB_DB_PASS: mysecretpassword
+      MB_DB_HOST: metabase-postgres
+    healthcheck:
+      test: curl --fail -I http://localhost:3000/api/health || exit 1
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      - metabase-postgres
+
+  metabase-postgres:
+    image: postgres:latest
+    container_name: metabase-postgres
+    hostname: metabase-postgres
+    environment:
+      POSTGRES_USER: metabase
+      POSTGRES_DB: metabaseappdb
+      POSTGRES_PASSWORD: mysecretpassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - metabase-postgres-data:/var/lib/postgresql/data
+
+  analytics-postgres:
+    image: postgres:latest
+    container_name: analytics-postgres
+    hostname: analytics-postgres
+    environment:
+      POSTGRES_USER: analytics
+      POSTGRES_DB: analyticsdb
+      POSTGRES_PASSWORD: analytics_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - analytics-postgres-data:/var/lib/postgresql/data
+
+  mage:
+    image: mageai/mageai:latest
+    container_name: mage
+    command: mage start asseto-corsa-mage
+    environment:
+      USER_CODE_PATH: /home/src/asseto-corsa-mage
+    ports:
+      - 6789:6789
+    volumes:
+      - .:/home/src/
+    depends_on:
+      - kafka
+      - analytics-postgres
+
+volumes:
+  metabase-postgres-data:
+  analytics-postgres-data:

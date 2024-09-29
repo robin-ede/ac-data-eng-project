@@ -1,0 +1,2 @@
+pyaccsharedmemory
+kafka-python

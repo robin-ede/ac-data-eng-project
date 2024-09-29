@@ -1,0 +1,8 @@
+connector_type: postgres
+database: analyticsdb  # Name of the analytics database
+host: analytics-postgres  # Hostname of the analytics PostgreSQL service
+password: analytics_password  # Password for the analytics database
+port: 5432  # PostgreSQL default port inside the Docker container
+schema: public  # Default schema is typically 'public' unless you have a custom schema
+username: analytics  # Username for the analytics database
+table: car_telemetry  # Replace with the name of the table you want to export data to

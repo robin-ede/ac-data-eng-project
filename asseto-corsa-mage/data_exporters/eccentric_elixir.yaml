@@ -1,0 +1,10 @@
+connector_type: clickhouse
+profile: default
+config:
+  host: clickhouse  # This should match the service name in Docker Compose, usually 'clickhouse'.
+  port: 9000        # ClickHouse default port for native interface.
+  database: analytics  # Name of the database where the target table is located.
+  table_name: car_telemetry  # The name of the target table to which data should be exported.
+  user: user      # Username for ClickHouse. Replace with your specific user if needed.
+  password: password       # Password for ClickHouse user. If you have set a password, specify it here.
+  protocol: native   # Use 'native' for the default ClickHouse protocol.
