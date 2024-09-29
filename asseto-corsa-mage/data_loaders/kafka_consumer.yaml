@@ -1,5 +1,5 @@
 connector_type: kafka
-bootstrap_server: "kafka:9092"
+bootstrap_server: "kafka:9093"
 topic: car_details
 consumer_group: dev
 include_metadata: false

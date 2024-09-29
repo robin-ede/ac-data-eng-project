@@ -1,0 +1,14 @@
+triggers:
+- description: null
+  envs: []
+  last_enabled_at: 2024-09-28 21:20:26.238659
+  name: run_ac_pipeline
+  pipeline_uuid: ac_pipeline
+  schedule_interval: '@once'
+  schedule_type: time
+  settings: null
+  sla: null
+  start_time: 2024-09-27 20:39:00
+  status: inactive
+  token: 8ad8b26632a741618e24dc9534c917a9
+  variables: {}
