@@ -119,6 +119,7 @@ After successfully setting up and running the pipeline, the following outputs ar
 2. **Interactive Dashboards**: Using Metabase, users can visualize driver stats such as speed, tire pressure, race position, lap times, etc.
 
    ![Sample Visualization](images/ac-dashboard.png)
+3. **Live Dashboard Demonstration**: Watch the following video for a demonstration of the live dashboard in action during an actual race: https://www.youtube.com/watch?v=y1Xymd8Zgic
 
 ## Future Work
 
